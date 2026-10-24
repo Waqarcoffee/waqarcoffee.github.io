@@ -479,7 +479,7 @@ function renderProducts(){
 /* =====social===== */
 const SOCIALS = [
   ['whatsapp','https://wa.me/201035477377'],['facebook','https://www.facebook.com/WaqarCoffee'],
-  ['instagram','https://www.instagram.com/waqar_coffee/'],['tiktok','https://www.tiktok.com/@waqar_coffee']];
+  ['instagram','https://www.instagram.com/waqar.coffee/'],['tiktok','https://www.tiktok.com/@waqar_coffee']];
 document.querySelectorAll('.social-row').forEach(row=>{
   row.innerHTML = SOCIALS.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener" class="social-icon ${n}" aria-label="${n}"><svg><use href="#i-${n}"/></svg></a>`).join('');
 });
