@@ -202,6 +202,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .success-icon{font-size:3rem;color:var(--wine2);margin-bottom:1rem}
 .success-msg h3{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.5rem}
 .success-msg p{color:var(--muted);font-weight:300}
+.wa-retry{display:inline-block;margin-top:1.2rem;padding:.75rem 1.8rem;border-radius:50px;background:#25D366;color:#fff;text-decoration:none;font-size:.9rem;font-weight:600}
 
 /* FOOTER */
 .social-section{padding:3rem;background:var(--wine)}
@@ -291,7 +292,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
     <h1>تجربة قهوة استثنائية<br>تبدأ من هنا</h1>
     <div class="hero-btns">
       <a class="hero-btn solid" href="#menu"> المنيو</a>
-      <a class="hero-btn" href="#shop">منتجات المطحنة</a>
+      <a class="hero-btn" href="#shop">منتجات المطحن</a>
     </div>
   </div>
 </section>
@@ -311,11 +312,11 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 <section class="shop-section" id="shop">
   <div class="section-title">
     <h2>Waqar Roastery</h2>
-    <p>بن مطحون على ذوقك — اختار التوليفة والوزن والتحميص</p>
+    <p>بن مطحون على ذوقك — اختار التوليفة والوزن والتحميص والنوع</p>
   </div>
   <h3 class="group-title">Waqar Blends<small>توليفات وقار</small></h3>
   <div class="products-grid" id="gridBlends"></div>
-  <h3 class="group-title">Single Origin<small>قهوة أحادية المنشأ — بالكيلو</small></h3>
+  <h3 class="group-title">Single Origin<small>قهوة أحادية المنشأ</small></h3>
   <div class="products-grid" id="gridSingle"></div>
 </section>
 
@@ -333,6 +334,8 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
       <div class="modal-sizes" id="modalSizes"></div>
       <p class="modal-size-label">التحميص</p>
       <div class="modal-sizes" id="modalRoasts"></div>
+      <p class="modal-size-label">النوع</p>
+      <div class="modal-sizes" id="modalTypes"></div>
       <p class="modal-price" id="modalPrice">LE —</p>
       <div class="modal-qty-row">
         <span class="modal-size-label" style="margin:0">الكمية</span>
@@ -384,12 +387,13 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
         </div>
       </div>
       <div class="order-summary"><span class="summary-label">إجمالي الطلب</span><span class="summary-total" id="totalDisplay">—</span></div>
-      <button type="button" class="submit-btn" onclick="submitOrder()">تأكيد الطلب ←</button>
+      <button type="button" class="submit-btn" onclick="submitOrder()">تأكيد الطلب على واتساب ←</button>
     </form>
     <div class="success-msg" id="successMsg">
       <div class="success-icon">✓</div>
-      <h3>تم استلام طلبك!</h3>
-      <p id="successText">هنتواصل معاك في أقرب وَقَار لتأكيد التفاصيل والتوصيل.</p>
+      <h3>تم تجهيز طلبك!</h3>
+      <p id="successText">اتفتح معاك واتساب برسالة الطلب — اضغط إرسال علشان طلبك يوصلنا.</p>
+      <a class="wa-retry" id="waRetry" href="#" target="_blank" rel="noopener">لو الواتساب ماتفتحش اضغط هنا</a>
     </div>
   </div>
 </section>
@@ -399,7 +403,10 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 <footer>© 2026 وَقَار - أصل القهوة</footer>
 
 <script>
-/* ===== المنيو ===== */
+
+const WA_NUMBER = '201035477377';
+
+/* ===== menu ===== */
 const MENU = [
  {id:'turkish', ar:'قهوة تركي', en:'Turkish Coffee', items:[
   ['توليفة كلاسيك','Classic Blend',25],['توليفة سبيشيال','Special Blend',30],['توليفة وقار','Waqar Blend',35]]},
@@ -452,33 +459,35 @@ function showCategory(id, btn){
 
 /* ===== المطحن ===== */
 const IMG = 'Waqar coffee.jpg';
+const sizesFrom125 = p => ({'125g':p,'250g':p*2,'500g':p*4,'1kg':p*8});
+const TYPES = ['ساده','محوج'];
 const PRODUCTS = {
-  classic:  {group:'blends', name:'Classic Blend', img:IMG, desc:'قهوة تركي كلاسيك بطعم أصيل وقوام مضبوط، ريحة قوية ونكهة متوازنة تخلي كل فنجان له مزاجه الخاص.', sizes:{'125g':65,'250g':130}, roasts:['فاتح','وسط']},
-  special:  {group:'blends', name:'Special Blend', img:IMG, desc:'توليفة إسبشيال بطبقات نكهة غنية وتوازن فاخر … تجربة قهوة استثنائية لعشاق التميز.', sizes:{'125g':75,'250g':150}, roasts:['فاتح','وسط']},
-  Dark:     {group:'blends', name:'Dark Blend', img:IMG, desc:'قهوة تركي تقيلة بكافيين عالي وقوام قوي، طعم مركز يديك صحوة سريعة ومزاج عالي من أول فنجان.', sizes:{'125g':70,'250g':140}, roasts:['فاتح','وسط']},
-  Waqar:    {group:'blends', name:'Waqar Blend (70% Arabica)', img:IMG, desc:'قهوة تركي ناعمة وخفيفة بطعم هادي وحموضة لطيفة، ريحة مميزة لعشاق القهوة الرايقة.', sizes:{'125g':90,'250g':180}, roasts:['فاتح','وسط']},
-  Espresso: {group:'blends', name:'Espresso', img:IMG, desc:'قهوة تركي فاخرة 100% أرابيكا بطعم نقي وناعم جدًا، ريحة غنية وتجربة مميزة لعشاق القهوة الفخمة.', sizes:{'125g':90,'250g':180}, roasts:['فاتح','وسط']},
-  brazilian:{group:'single', name:'Brazilian', img:IMG, desc:'قهوة أحادية المنشأ (Single Origin) من البرازيل، بتتباع بالكيلو.', sizes:{'1kg':800}, roasts:['فاتح','وسط']},
-  ethiopian:{group:'single', name:'Ethiopian', img:IMG, desc:'قهوة أحادية المنشأ (Single Origin) من إثيوبيا، بتتباع بالكيلو.', sizes:{'1kg':800}, roasts:['فاتح','وسط']},
-  colombian:{group:'single', name:'Colombian', img:IMG, desc:'قهوة أحادية المنشأ (Single Origin) من كولومبيا، بتتباع بالكيلو.', sizes:{'1kg':1000}, roasts:['فاتح','وسط']}
+  classic:  {group:'blends', name:'Classic Blend', img:IMG, desc:'قهوة تركي كلاسيك بطعم أصيل وقوام مضبوط، ريحة قوية ونكهة متوازنة تخلي كل فنجان له مزاجه الخاص.', sizes:sizesFrom125(65), roasts:['فاتح','وسط'], types:TYPES},
+  special:  {group:'blends', name:'Special Blend', img:IMG, desc:'توليفة إسبشيال بطبقات نكهة غنية وتوازن فاخر … تجربة قهوة استثنائية لعشاق التميز.', sizes:sizesFrom125(75), roasts:['فاتح','وسط'], types:TYPES},
+  Dark:     {group:'blends', name:'Dark Blend', img:IMG, desc:'قهوة تركي تقيلة بكافيين عالي وقوام قوي، طعم مركز يديك صحوة سريعة ومزاج عالي من أول فنجان.', sizes:sizesFrom125(70), roasts:['فاتح','وسط'], types:TYPES},
+  Waqar:    {group:'blends', name:'Waqar Blend (70% Arabica)', img:IMG, desc:'قهوة تركي ناعمة وخفيفة بطعم هادي وحموضة لطيفة، ريحة مميزة لعشاق القهوة الرايقة.', sizes:sizesFrom125(90), roasts:['فاتح','وسط'], types:TYPES},
+  Espresso: {group:'blends', name:'Espresso', img:IMG, desc:'قهوة تركي فاخرة 100% أرابيكا بطعم نقي وناعم جدًا، ريحة غنية وتجربة مميزة لعشاق القهوة الفخمة.', sizes:sizesFrom125(90), roasts:['فاتح','وسط'], types:TYPES},
+  brazilian:{group:'single', name:'Brazilian', img:IMG, desc:'قهوة أحادية المنشأ (Single Origin) من البرازيل.', sizes:sizesFrom125(100), roasts:['فاتح','وسط'], types:TYPES},
+  ethiopian:{group:'single', name:'Ethiopian', img:IMG, desc:'قهوة أحادية المنشأ (Single Origin) من إثيوبيا.', sizes:sizesFrom125(100), roasts:['فاتح','وسط'], types:TYPES},
+  colombian:{group:'single', name:'Colombian', img:IMG, desc:'قهوة أحادية المنشأ (Single Origin) من كولومبيا.', sizes:sizesFrom125(125), roasts:['فاتح','وسط'], types:TYPES}
 };
 
 function renderProducts(){
   Object.entries(PRODUCTS).forEach(([key,p])=>{
     const from = Math.min(...Object.values(p.sizes));
-    const priceTxt = p.group==='single' ? `<strong>LE ${from}</strong> / كيلو` : `من <strong>LE ${from}</strong>`;
+    const priceTxt = `من <strong>LE ${from}</strong>`;
     const el = document.createElement('div');
     el.className = 'product-card';
     el.innerHTML = `<div class="product-card-img"><img src="${p.img}" alt="${p.name}"></div>
       <div class="product-card-body"><p class="product-card-name">${p.name}</p><p class="product-card-price">${priceTxt}</p>
-      <button class="product-card-btn" onclick="openModal('${key}')">اختار الوزن والتحميص</button></div>`;
+      <button class="product-card-btn" onclick="openModal('${key}')">اختار الوزن والتحميص والنوع</button></div>`;
     document.getElementById(p.group==='single'?'gridSingle':'gridBlends').appendChild(el);
   });
 }
 
 /* =====social===== */
 const SOCIALS = [
-  ['whatsapp','https://wa.me/201035477377'],['facebook','https://www.facebook.com/WaqarCoffee'],
+  ['whatsapp','https://wa.me/'+WA_NUMBER],['facebook','https://www.facebook.com/WaqarCoffee'],
   ['instagram','https://www.instagram.com/waqar.coffee/'],['tiktok','https://www.tiktok.com/@waqar_coffee']];
 document.querySelectorAll('.social-row').forEach(row=>{
   row.innerHTML = SOCIALS.map(([n,u])=>`<a href="${u}" target="_blank" rel="noopener" class="social-icon ${n}" aria-label="${n}"><svg><use href="#i-${n}"/></svg></a>`).join('');
@@ -498,7 +507,7 @@ function selectPayment(m){
 }
 
 /* ===== MODAL ===== */
-let modalQty=1, currentProduct=null, currentSize=null, currentRoast=null;
+let modalQty=1, currentProduct=null, currentSize=null, currentRoast=null, currentType=null;
 function chips(containerId, values, onPick){
   const el = document.getElementById(containerId); el.innerHTML='';
   values.forEach((v,i)=>{
@@ -514,9 +523,10 @@ function openModal(key){
   document.getElementById('modalName').textContent=p.name;
   document.getElementById('modalDesc').textContent=p.desc;
   document.getElementById('modalQty').textContent=1;
-  const sizes = Object.keys(p.sizes); currentSize=sizes[0]; currentRoast=p.roasts[0];
+  const sizes = Object.keys(p.sizes); currentSize=sizes[0]; currentRoast=p.roasts[0]; currentType=p.types[0];
   chips('modalSizes', sizes, s=>{currentSize=s; updateModalPrice();});
   chips('modalRoasts', p.roasts, r=>{currentRoast=r;});
+  chips('modalTypes', p.types, t=>{currentType=t;});
   updateModalPrice();
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
@@ -526,7 +536,7 @@ function changeModalQty(d){ modalQty=Math.max(1,modalQty+d); document.getElement
 function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow=''; }
 function closeModalOutside(e){ if(e.target.id==='modalOverlay') closeModal(); }
 
-/* ===== نوع الطلب ===== */
+/* ===== order===== */
 let orderType='delivery';
 const WH={H:[...Array(12)].map((_,i)=>String(i+1)),M:[...Array(60)].map((_,i)=>String(i).padStart(2,'0')),P:['ص','م']};
 const WCOLS=[['H','wH'],['M','wM'],['P','wP']], wsel={H:0,M:0,P:0};
@@ -572,9 +582,9 @@ function addDrink(cid,k){
 }
 function addToCart(){
   const p=PRODUCTS[currentProduct], price=p.sizes[currentSize];
-  const key=currentProduct+'_'+currentSize+'_'+currentRoast;
+  const key=currentProduct+'_'+currentSize+'_'+currentRoast+'_'+currentType;
   const ex=cart.find(i=>i.key===key&&!i.note);
-  if(ex) ex.qty+=modalQty; else cart.push({id:key+'_'+(++uid),key,name:p.name,img:p.img,size:currentSize,roast:currentRoast,price,qty:modalQty,note:''});
+  if(ex) ex.qty+=modalQty; else cart.push({id:key+'_'+(++uid),key,name:p.name,img:p.img,size:currentSize,roast:currentRoast,type:currentType,price,qty:modalQty,note:''});
   closeModal(); renderCart(); openCart(); showToast('تمت إضافة المنتج للسلة 🛒');
 }
 function renderCart(){
@@ -586,7 +596,7 @@ function renderCart(){
     total+=i.price*i.qty;
     const d=document.createElement('div'); d.className='cart-item';
     d.innerHTML=`${i.img?`<div class="cart-item-img"><img src="${i.img}" alt="${i.name}"></div>`:`<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.6rem">☕</div>`}
-      <div class="cart-item-info"><p class="cart-item-name">${i.name}</p><p class="cart-item-details">${i.size?`${i.size} · تحميص ${i.roast}`:'مشروب'}</p><p class="cart-item-price">LE ${i.price*i.qty}</p></div>
+      <div class="cart-item-info"><p class="cart-item-name">${i.name}</p><p class="cart-item-details">${i.size?`${i.size} · تحميص ${i.roast} · ${i.type}`:'مشروب'}</p><p class="cart-item-price">LE ${i.price*i.qty}</p></div>
       <div class="cart-item-controls"><button class="cart-qty-btn" onclick="updateCartQty('${i.id}',-1)">−</button><span>${i.qty}</span><button class="cart-qty-btn" onclick="updateCartQty('${i.id}',1)">+</button><button class="cart-remove" onclick="removeFromCart('${i.id}')" aria-label="حذف">🗑</button></div>
       <input class="cart-note" type="text" value="${esc(i.note||'')}" placeholder="${i.size?'ملاحظة (اختياري)':'اضافة ملاحظة (مثلاً: سكر زيادة)'}" oninput="setNote('${i.id}',this.value)">`;
     el.appendChild(d);
@@ -600,12 +610,31 @@ function renderOrderSummary(){
   const el=document.getElementById('orderCartItems'), t=document.getElementById('totalDisplay');
   if(!cart.length){ el.innerHTML='<p style="color:var(--muted);font-size:.85rem;font-weight:300">السلة فارغة — أضف مشروبات من المنيو أو بن من المطحن</p>'; t.textContent='—'; return; }
   let total=0; el.innerHTML='';
-  cart.forEach(i=>{ total+=i.price*i.qty; const r=document.createElement('div'); r.className='order-cart-item'; r.innerHTML=`<span>${i.name}${i.size?` (${i.size} · ${i.roast})`:''} × ${i.qty}${i.note?`<br><small>ملاحظة: ${esc(i.note)}</small>`:''}</span><span>LE ${i.price*i.qty}</span>`; el.appendChild(r); });
+  cart.forEach(i=>{ total+=i.price*i.qty; const r=document.createElement('div'); r.className='order-cart-item'; r.innerHTML=`<span>${i.name}${i.size?` (${i.size} · ${i.roast} · ${i.type})`:''} × ${i.qty}${i.note?`<br><small>ملاحظة: ${esc(i.note)}</small>`:''}</span><span>LE ${i.price*i.qty}</span>`; el.appendChild(r); });
   t.textContent=total.toLocaleString('ar-EG')+' جنيه';
 }
 function openCart(){ document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartSidebar').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartSidebar').classList.remove('open'); document.body.style.overflow=''; }
 function goToCheckout(){ closeCart(); document.getElementById('order').scrollIntoView({behavior:'smooth'}); }
+
+/* ===== whatsapp order ===== */
+function buildOrderMessage({dine,name,phone,address,pk,payment,total}){
+  const lines = cart.map(i=>
+    `• ${i.name}${i.size?` — ${i.size} · تحميص ${i.roast} · ${i.type}`:''} × ${i.qty} = ${i.price*i.qty} جنيه${i.note?`\n   ملاحظة: ${i.note}`:''}`);
+  return [
+    '',
+    `*نوع الطلب:* ${dine?'في الكافيه':'توصيل'}`,
+    `*الاسم:* ${name}`,
+    phone ? `*رقم الهاتف:* ${phone}` : null,
+    dine ? `*موعد الاستلام:* ${pk}` : `*العنوان:* ${address}`,
+    '',
+    '*المنتجات:*',
+    ...lines,
+    '',
+    `*طريقة الدفع:* ${payment}`,
+    `*الإجمالي:* ${total.toLocaleString('ar-EG')} جنيه`
+  ].filter(l=>l!==null).join('\n');
+}
 
 function submitOrder(){
   const name=document.getElementById('name').value.trim(), phone=document.getElementById('phone').value.trim(), address=document.getElementById('address').value.trim(); const pk=pickupText();
@@ -613,13 +642,31 @@ function submitOrder(){
   if(!name||(dine?!pk:(!phone||!address))){ alert(dine?'من فضلك اكتب اسمك وحدد وقت الاستلام.':'من فضلك اكتب اسمك ورقم هاتفك وعنوانك.'); return; }
   if(!cart.length){ alert('السلة فارغة — أضف منتجات أول.'); return; }
   if(!selectedPayment){ alert('من فضلك اختار طريقة الدفع.'); return; }
-  const labels={vodafone:'فودافون كاش',instapay:'InstaPay',cod:'الدفع عند الاستلام'};
+  const labels={vodafone:'فودافون كاش',instapay:'InstaPay',cod:dine?'الدفع في الكافيه':'الدفع عند الاستلام'};
   const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const products=cart.map(i=>`${i.name}${i.size?` ${i.size} تحميص ${i.roast}`:''} × ${i.qty}${i.note?` (ملاحظة: ${i.note})`:''}`).join(' | ');
-  fetch('https://formspree.io/f/xeepznaa',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({orderType:dine?'في الكافيه':'توصيل',name,phone,address:dine?'':address,pickup:dine?pk:'',products,payment:labels[selectedPayment],total:total.toLocaleString('ar-EG')+' جنيه'})
-  }).then(r=>{ if(!r.ok) throw 0; document.getElementById('orderForm').style.display='none'; document.getElementById('successMsg').style.display='block'; document.getElementById('successText').textContent=dine?'طلبك اتسجل وهنجهزه على ميعادك.':'هنتواصل معاك في أقرب وَقَار لتأكيد التفاصيل والتوصيل.'; cart=[]; renderCart(); })
-    .catch(()=>alert('في مشكلة في الإرسال، حاول تاني.'));
+  const msg=buildOrderMessage({dine,name,phone,address,pk,payment:labels[selectedPayment],total});
+  const url='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg);
+
+
+  const products=cart.map(i=>`${i.name}${i.size?` ${i.size} تحميص ${i.roast} ${i.type}`:''} × ${i.qty}${i.note?` (ملاحظة: ${i.note})`:''}`).join(' | ');
+  try{
+    fetch('https://formspree.io/f/xeepznaa',{
+      method:'POST', keepalive:true,
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({orderType:dine?'في الكافيه':'توصيل',name,phone,address:dine?'':address,pickup:dine?pk:'',products,payment:labels[selectedPayment],total:total.toLocaleString('ar-EG')+' جنيه'})
+    }).catch(()=>{});
+  }catch(e){}
+
+  document.getElementById('waRetry').href=url;
+  document.getElementById('orderForm').style.display='none';
+  document.getElementById('successMsg').style.display='block';
+  document.getElementById('successText').textContent=dine
+    ? 'اتفتح معاك واتساب برسالة الطلب — اضغط إرسال وهنجهزه على ميعادك.'
+    : 'اتفتح معاك واتساب برسالة الطلب — اضغط إرسال علشان طلبك يوصلنا.';
+  cart=[]; renderCart();
+
+  const w=window.open(url,'_blank');
+  if(!w) location.href=url;
 }
 
 function showToast(msg){
