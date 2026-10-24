@@ -9,11 +9,11 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --wine:#2e0b12;      /* الحيطة البورجندي */
+  --wine:#2e0b12;      
   --wine2:#4a1420;
-  --gold:#c9a24b;      /* النحاس/الدهبي */
+  --gold:#c9a24b;      
   --gold-l:#e6cd8e;
-  --oak:#d9c6a5;       /* خشب الكاونتر */
+  --oak:#d9c6a5;       
   --cream:#f6efe3;
   --walnut:#3b2416;
   --text:#2a1a14;
@@ -68,7 +68,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .hero-btn.solid{background:var(--gold);color:var(--wine);font-weight:600}
 .hero-btn:hover{background:var(--gold-l);border-color:var(--gold-l);color:var(--wine)}
 
-/* فاصل شكل ألواح الكاونتر + إضاءة LED */
+
 .slats{height:34px;background:repeating-linear-gradient(90deg,#d9c6a5 0 14px,#bfa987 14px 17px);border-top:3px solid var(--walnut);box-shadow:0 -6px 18px -4px var(--glow)}
 
 /* MENU */
@@ -240,7 +240,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 </head>
 <body>
 
-<!-- أيقونات السوشيال (معرّفة مرة واحدة) -->
+<!-- social icons -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol>
 <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></symbol>
@@ -399,7 +399,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 <footer>© 2026 وَقَار - أصل القهوة</footer>
 
 <script>
-/* ===== المنيو (عدّل الأسعار والأصناف من هنا بس) ===== */
+/* ===== المنيو ===== */
 const MENU = [
  {id:'turkish', ar:'قهوة تركي', en:'Turkish Coffee', items:[
   ['توليفة كلاسيك','Classic Blend',25],['توليفة سبيشيال','Special Blend',30],['توليفة وقار','Waqar Blend',35]]},
@@ -476,7 +476,7 @@ function renderProducts(){
   });
 }
 
-/* ===== السوشيال ===== */
+/* =====social===== */
 const SOCIALS = [
   ['whatsapp','https://wa.me/201035477377'],['facebook','https://www.facebook.com/WaqarCoffee'],
   ['instagram','https://www.instagram.com/waqar_coffee/'],['tiktok','https://www.tiktok.com/@waqar_coffee']];
@@ -530,11 +530,11 @@ function closeModalOutside(e){ if(e.target.id==='modalOverlay') closeModal(); }
 let orderType='delivery';
 const WH={H:[...Array(12)].map((_,i)=>String(i+1)),M:[...Array(60)].map((_,i)=>String(i).padStart(2,'0')),P:['ص','م']};
 const WCOLS=[['H','wH'],['M','wM'],['P','wP']], wsel={H:0,M:0,P:0};
-const WC={H:5,M:5,P:1}; /* عدد مرات تكرار القايمة عشان العجلة تلف بلا نهاية */
+const WC={H:5,M:5,P:1}; 
 function markWheel(k,col){
   const len=WH[k].length, i=Math.max(0,Math.round(col.scrollTop/50)), real=WC[k]>1?((i%len)+len)%len:Math.min(i,len-1);
   wsel[k]=real;
-  if(WC[k]>1&&(i<len||i>=len*(WC[k]-1))) col.scrollTop=(Math.floor(WC[k]/2)*len+real)*50; /* رجّعها للنص من غير ما يبان */
+  if(WC[k]>1&&(i<len||i>=len*(WC[k]-1))) col.scrollTop=(Math.floor(WC[k]/2)*len+real)*50; 
   [...col.children].forEach((c,j)=>c.classList.toggle('sel',j%len===real));
 }
 function applyWheel(){ WCOLS.forEach(([k,id])=>{ const col=document.getElementById(id); col.scrollTop=(Math.floor(WC[k]/2)*WH[k].length+wsel[k])*50; markWheel(k,col); }); }
@@ -631,7 +631,6 @@ function showToast(msg){
 }
 
 renderMenuTabs(); renderProducts(); renderCart(); buildWheel();
-/* الصورة تظهر بنعومة أول ما تخلص تحميل، وقبلها الخلفية دهبي/بورجندي */
 { const im=new Image(); im.onload=()=>document.querySelector('.hero').classList.add('loaded'); im.src='coffee background.jpg'; }
 </script>
 </body>
