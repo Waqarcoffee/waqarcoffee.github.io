@@ -290,8 +290,8 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
   <div class="hero-content">
     <h1>تجربة قهوة استثنائية<br>تبدأ من هنا</h1>
     <div class="hero-btns">
-      <a class="hero-btn solid" href="#menu">شوف المنيو</a>
-      <a class="hero-btn" href="#shop">اشتري البن</a>
+      <a class="hero-btn solid" href="#menu"> المنيو</a>
+      <a class="hero-btn" href="#shop">منتجات المطحنة</a>
     </div>
   </div>
 </section>
@@ -305,7 +305,6 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
   </div>
   <div class="menu-tabs" id="menuTabs" role="tablist"></div>
   <div class="menu-panel" id="menuPanel"></div>
-  <p class="menu-note">دوس + جنب المشروب عشان تضيفه للسلة، وبعدها اختار توصيل أو في الكافيه.</p>
 </section>
 
 <!-- SHOP: المطحن -->
@@ -349,7 +348,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 <!-- ORDER -->
 <section class="order-section" id="order">
   <div class="order-inner">
-    <div class="order-header"><h2>اطلب الآن</h2><p>توصيل لحد البيت أو اشرب في الكافيه</p></div>
+    <div class="order-header"><h2>اطلب الآن</h2><p>توصيل لحد البيت أو في الكافيه</p></div>
     <form class="order-form" id="orderForm" onsubmit="return false">
       <div class="otype">
         <button type="button" class="otype-btn active" id="ot-delivery" onclick="setOrderType('delivery')">🛵 توصيل</button>
@@ -361,7 +360,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
       </div>
       <div class="field-group" id="fieldAddress"><label for="address">العنوان</label><input type="text" id="address" placeholder="المحافظة / المنطقة"></div>
       <div class="field-group" id="fieldPickup" style="display:none">
-        <label>هتيجي امتى؟</label>
+        <label>موعد الإستلام</label>
         <div class="wheel" id="wheel" aria-label="وقت الاستلام">
           <div class="wcol" id="wH"></div><div class="wcol" id="wM"></div><div class="wcol" id="wP"></div>
         </div>
@@ -496,8 +495,6 @@ function selectPayment(m){
   const r = document.getElementById('paymentReveal');
   if(m==='cod'){ r.classList.remove('visible'); return; }
   r.classList.add('visible');
-  document.getElementById('paymentRevealTitle').textContent = m==='vodafone' ? 'رقم فودافون كاش' : 'رقم InstaPay';
-  document.getElementById('paymentRevealNote').textContent = (m==='vodafone' ? 'حول المبلغ على الرقم ده' : 'حول المبلغ عبر إنستاباي') + '.';
 }
 
 /* ===== MODAL ===== */
@@ -591,7 +588,7 @@ function renderCart(){
     d.innerHTML=`${i.img?`<div class="cart-item-img"><img src="${i.img}" alt="${i.name}"></div>`:`<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.6rem">☕</div>`}
       <div class="cart-item-info"><p class="cart-item-name">${i.name}</p><p class="cart-item-details">${i.size?`${i.size} · تحميص ${i.roast}`:'مشروب'}</p><p class="cart-item-price">LE ${i.price*i.qty}</p></div>
       <div class="cart-item-controls"><button class="cart-qty-btn" onclick="updateCartQty('${i.id}',-1)">−</button><span>${i.qty}</span><button class="cart-qty-btn" onclick="updateCartQty('${i.id}',1)">+</button><button class="cart-remove" onclick="removeFromCart('${i.id}')" aria-label="حذف">🗑</button></div>
-      <input class="cart-note" type="text" value="${esc(i.note||'')}" placeholder="${i.size?'ملاحظة (اختياري)':'ملاحظة للمشروب (مثلاً: سكر زيادة)'}" oninput="setNote('${i.id}',this.value)">`;
+      <input class="cart-note" type="text" value="${esc(i.note||'')}" placeholder="${i.size?'ملاحظة (اختياري)':'اضافة ملاحظة (مثلاً: سكر زيادة)'}" oninput="setNote('${i.id}',this.value)">`;
     el.appendChild(d);
   });
   document.getElementById('cartTotal').textContent='LE '+total;
