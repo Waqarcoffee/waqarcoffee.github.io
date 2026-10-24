@@ -292,7 +292,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
     <h1>تجربة قهوة استثنائية<br>تبدأ من هنا</h1>
     <div class="hero-btns">
       <a class="hero-btn solid" href="#menu"> المنيو</a>
-      <a class="hero-btn" href="#shop">منتجات المطحن</a>
+      <a class="hero-btn" href="#shop">منتجات المطحنة</a>
     </div>
   </div>
 </section>
@@ -393,7 +393,7 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
       <div class="success-icon">✓</div>
       <h3>تم تجهيز طلبك!</h3>
       <p id="successText">اتفتح معاك واتساب برسالة الطلب — اضغط إرسال علشان طلبك يوصلنا.</p>
-      <a class="wa-retry" id="waRetry" href="#" target="_blank" rel="noopener">لو الواتساب ماتفتحش اضغط هنا</a>
+      <a class="wa-retry" id="waRetry" href="#" rel="noopener">لو الواتساب ماتفتحش اضغط هنا</a>
     </div>
   </div>
 </section>
@@ -403,10 +403,12 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 <footer>© 2026 وَقَار - أصل القهوة</footer>
 
 <script>
-
+/* رقم الواتساب اللي بيوصله الطلب (بدون + ) */
 const WA_NUMBER = '201035477377';
+/* على الموبايل بنفتح تطبيق واتساب مباشرة من نفس الصفحة (من غير تاب جديد فاضي) */
+const IS_MOBILE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints>1 && /Mac/i.test(navigator.platform));
 
-/* ===== menu ===== */
+/* ===== المنيو ===== */
 const MENU = [
  {id:'turkish', ar:'قهوة تركي', en:'Turkish Coffee', items:[
   ['توليفة كلاسيك','Classic Blend',25],['توليفة سبيشيال','Special Blend',30],['توليفة وقار','Waqar Blend',35]]},
@@ -459,6 +461,7 @@ function showCategory(id, btn){
 
 /* ===== المطحن ===== */
 const IMG = 'Waqar coffee.jpg';
+/* السعر هنا هو سعر الـ 125 جرام — باقي الأوزان بتتحسب منه (×2 ، ×4 ، ×8) */
 const sizesFrom125 = p => ({'125g':p,'250g':p*2,'500g':p*4,'1kg':p*8});
 const TYPES = ['ساده','محوج'];
 const PRODUCTS = {
@@ -536,7 +539,7 @@ function changeModalQty(d){ modalQty=Math.max(1,modalQty+d); document.getElement
 function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow=''; }
 function closeModalOutside(e){ if(e.target.id==='modalOverlay') closeModal(); }
 
-/* ===== order===== */
+/* ===== نوع الطلب ===== */
 let orderType='delivery';
 const WH={H:[...Array(12)].map((_,i)=>String(i+1)),M:[...Array(60)].map((_,i)=>String(i).padStart(2,'0')),P:['ص','م']};
 const WCOLS=[['H','wH'],['M','wM'],['P','wP']], wsel={H:0,M:0,P:0};
@@ -617,11 +620,12 @@ function openCart(){ document.getElementById('cartOverlay').classList.add('open'
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartSidebar').classList.remove('open'); document.body.style.overflow=''; }
 function goToCheckout(){ closeCart(); document.getElementById('order').scrollIntoView({behavior:'smooth'}); }
 
-/* ===== whatsapp order ===== */
+/* ===== إرسال الطلب على واتساب ===== */
 function buildOrderMessage({dine,name,phone,address,pk,payment,total}){
   const lines = cart.map(i=>
     `• ${i.name}${i.size?` — ${i.size} · تحميص ${i.roast} · ${i.type}`:''} × ${i.qty} = ${i.price*i.qty} جنيه${i.note?`\n   ملاحظة: ${i.note}`:''}`);
   return [
+    '*طلب جديد — وَقَار* ☕',
     '',
     `*نوع الطلب:* ${dine?'في الكافيه':'توصيل'}`,
     `*الاسم:* ${name}`,
@@ -647,7 +651,7 @@ function submitOrder(){
   const msg=buildOrderMessage({dine,name,phone,address,pk,payment:labels[selectedPayment],total});
   const url='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg);
 
-
+  /* نسخة على الإيميل عن طريق Formspree — بتتبعت في الخلفية ومش بتأخّر فتح واتساب */
   const products=cart.map(i=>`${i.name}${i.size?` ${i.size} تحميص ${i.roast} ${i.type}`:''} × ${i.qty}${i.note?` (ملاحظة: ${i.note})`:''}`).join(' | ');
   try{
     fetch('https://formspree.io/f/xeepznaa',{
@@ -657,7 +661,8 @@ function submitOrder(){
     }).catch(()=>{});
   }catch(e){}
 
-  document.getElementById('waRetry').href=url;
+  const retry=document.getElementById('waRetry');
+  retry.href=url; retry.target=IS_MOBILE?'_self':'_blank';
   document.getElementById('orderForm').style.display='none';
   document.getElementById('successMsg').style.display='block';
   document.getElementById('successText').textContent=dine
@@ -665,8 +670,11 @@ function submitOrder(){
     : 'اتفتح معاك واتساب برسالة الطلب — اضغط إرسال علشان طلبك يوصلنا.';
   cart=[]; renderCart();
 
-  const w=window.open(url,'_blank');
-  if(!w) location.href=url;
+  if(IS_MOBILE){
+    location.href='whatsapp://send?phone='+WA_NUMBER+'&text='+encodeURIComponent(msg);
+  }else if(!window.open(url,'_blank')){
+    location.href=url;
+  }
 }
 
 function showToast(msg){
