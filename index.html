@@ -403,12 +403,12 @@ footer{text-align:center;padding:1.5rem;background:var(--wine);border-top:1px so
 <footer>© 2026 وَقَار - أصل القهوة</footer>
 
 <script>
-/* رقم الواتساب اللي بيوصله الطلب (بدون + ) */
+
 const WA_NUMBER = '201035477377';
-/* على الموبايل بنفتح تطبيق واتساب مباشرة من نفس الصفحة (من غير تاب جديد فاضي) */
+
 const IS_MOBILE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints>1 && /Mac/i.test(navigator.platform));
 
-/* ===== المنيو ===== */
+/* ===== menu ===== */
 const MENU = [
  {id:'turkish', ar:'قهوة تركي', en:'Turkish Coffee', items:[
   ['توليفة كلاسيك','Classic Blend',25],['توليفة سبيشيال','Special Blend',30],['توليفة وقار','Waqar Blend',35]]},
@@ -461,7 +461,7 @@ function showCategory(id, btn){
 
 /* ===== المطحن ===== */
 const IMG = 'Waqar coffee.jpg';
-/* السعر هنا هو سعر الـ 125 جرام — باقي الأوزان بتتحسب منه (×2 ، ×4 ، ×8) */
+
 const sizesFrom125 = p => ({'125g':p,'250g':p*2,'500g':p*4,'1kg':p*8});
 const TYPES = ['ساده','محوج'];
 const PRODUCTS = {
@@ -539,7 +539,7 @@ function changeModalQty(d){ modalQty=Math.max(1,modalQty+d); document.getElement
 function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow=''; }
 function closeModalOutside(e){ if(e.target.id==='modalOverlay') closeModal(); }
 
-/* ===== نوع الطلب ===== */
+/* ===== order ===== */
 let orderType='delivery';
 const WH={H:[...Array(12)].map((_,i)=>String(i+1)),M:[...Array(60)].map((_,i)=>String(i).padStart(2,'0')),P:['ص','م']};
 const WCOLS=[['H','wH'],['M','wM'],['P','wP']], wsel={H:0,M:0,P:0};
@@ -620,7 +620,7 @@ function openCart(){ document.getElementById('cartOverlay').classList.add('open'
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartSidebar').classList.remove('open'); document.body.style.overflow=''; }
 function goToCheckout(){ closeCart(); document.getElementById('order').scrollIntoView({behavior:'smooth'}); }
 
-/* ===== إرسال الطلب على واتساب ===== */
+/* ===== whatsapp order ===== */
 function buildOrderMessage({dine,name,phone,address,pk,payment,total}){
   const lines = cart.map(i=>
     `• ${i.name}${i.size?` — ${i.size} · تحميص ${i.roast} · ${i.type}`:''} × ${i.qty} = ${i.price*i.qty} جنيه${i.note?`\n   ملاحظة: ${i.note}`:''}`);
@@ -651,7 +651,7 @@ function submitOrder(){
   const msg=buildOrderMessage({dine,name,phone,address,pk,payment:labels[selectedPayment],total});
   const url='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg);
 
-  /* نسخة على الإيميل عن طريق Formspree — بتتبعت في الخلفية ومش بتأخّر فتح واتساب */
+
   const products=cart.map(i=>`${i.name}${i.size?` ${i.size} تحميص ${i.roast} ${i.type}`:''} × ${i.qty}${i.note?` (ملاحظة: ${i.note})`:''}`).join(' | ');
   try{
     fetch('https://formspree.io/f/xeepznaa',{
