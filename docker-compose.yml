@@ -1,0 +1,14 @@
+services:
+  waqar:
+    build: .
+    ports:
+      - "8787:8787"
+    env_file: .env
+    volumes:
+      - waqar-data:/app/.data
+      - waqar-proofs:/app/storage/private
+    restart: unless-stopped
+
+volumes:
+  waqar-data:
+  waqar-proofs:

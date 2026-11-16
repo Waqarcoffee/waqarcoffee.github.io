@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+.data/
+storage/private/
+storage/public/*
+!storage/public/.gitkeep
+coverage/
+screenshots/test-results/
