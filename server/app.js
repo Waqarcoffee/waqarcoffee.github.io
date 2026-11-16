@@ -4,7 +4,7 @@ import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
 import { randomBytes } from 'node:crypto';
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { z } from 'zod';
 import { createDatabase, contentFromDb, mapProduct, mapSocial } from './db.js';
@@ -98,6 +98,17 @@ export function createApp(options = {}) {
   app.get('/api/admin/orders', (_req, res) => res.json(db.prepare('SELECT * FROM orders ORDER BY created_at DESC, id DESC').all().map((order) => ({ ...order, items: db.prepare('SELECT * FROM order_items WHERE order_id = ?').all(order.id).map((item) => ({ ...item, variant: JSON.parse(item.variant_json || '{}') })) }))));
   app.patch('/api/admin/orders/:id/status', requireCsrf, (req, res) => { const status = z.enum(statusValues).parse(req.body.status); db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(status, Number(req.params.id)); res.json({ ok: true }); });
   app.get('/api/admin/orders/:id/proof', (req, res) => { const order = db.prepare('SELECT proof_path FROM orders WHERE id = ?').get(Number(req.params.id)); if (!order?.proof_path) return res.sendStatus(404); res.sendFile(resolve(storageRoot, 'private', order.proof_path), { dotfiles: 'deny' }); });
+  app.delete('/api/admin/orders/:id', requireCsrf, (req, res) => {
+    const id = Number(req.params.id);
+    const order = db.prepare('SELECT proof_path FROM orders WHERE id = ?').get(id);
+    if (!order) return res.sendStatus(404);
+    db.prepare('DELETE FROM orders WHERE id = ?').run(id);
+    if (order.proof_path) {
+      const proof = join(storageRoot, 'private', order.proof_path);
+      if (existsSync(proof)) unlinkSync(proof);
+    }
+    res.status(204).end();
+  });
 
   app.get('/api/admin/products', (_req, res) => res.json(db.prepare('SELECT * FROM products ORDER BY sort_order, id').all().map(mapProduct)));
   app.post('/api/admin/products', requireCsrf, upload.single('image'), (req, res, next) => { try { const data = productInput(req.body); const image = req.file ? publicImage(req.file, storageRoot) : '/uploads/coffee-bag.webp'; db.prepare('INSERT INTO products (id, group_name, name, ar_name, note, description, image_path, sizes_json, roasts_json, types_json, active, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(data.id, data.group, data.name, data.arName, data.note, data.desc, image, JSON.stringify(data.sizes), JSON.stringify(data.roasts), JSON.stringify(data.types), data.active ? 1 : 0, data.sortOrder); res.status(201).json({ ok: true }); } catch (error) { next(error); } });

@@ -75,6 +75,20 @@ describe('admin security and management', () => {
     await agent.delete('/api/admin/products/test-blend').set('x-csrf-token', csrf).expect(204);
   });
 
+  it('deletes an order permanently and removes it from dashboard totals', async () => {
+    const created = await request(app).post('/api/orders').field('customerName', 'طلب للحذف').field('phone', '01000000000').field('address', 'دمنهور').field('orderType', 'delivery').field('paymentMethod', 'cod').field('items', JSON.stringify([{ id: menuItemId, type: 'menu', qty: 1 }])).expect(201);
+    const orders = await agent.get('/api/admin/orders').expect(200);
+    const target = orders.body.find((order) => order.order_number === created.body.orderNumber);
+    const before = await agent.get('/api/admin/dashboard').expect(200);
+    await agent.delete(`/api/admin/orders/${target.id}`).expect(403);
+    await agent.delete(`/api/admin/orders/${target.id}`).set('x-csrf-token', csrf).expect(204);
+    const after = await agent.get('/api/admin/dashboard').expect(200);
+    expect(after.body.orders).toBe(before.body.orders - 1);
+    expect(after.body.revenue).toBe(before.body.revenue - target.total);
+    const remaining = await agent.get('/api/admin/orders').expect(200);
+    expect(remaining.body.some((order) => order.id === target.id)).toBe(false);
+  });
+
   it('keeps valid payment proof private but available to admin', async () => {
     const png = Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), Buffer.alloc(32)]);
     await request(app).post('/api/orders').field('customerName', 'دافع إلكتروني').field('phone', '01000000000').field('address', 'دمنهور').field('orderType', 'delivery').field('paymentMethod', 'vodafone').field('items', JSON.stringify([{ id: menuItemId, type: 'menu', qty: 1 }])).attach('proof', png, { filename: 'proof.png', contentType: 'image/png' }).expect(201);

@@ -37,7 +37,7 @@ export default function CartDrawer({ open, items, total, onClose, onUpdateQty, o
         <div className="drawer-footer">
           <div><span>الإجمالي</span><strong>{total.toLocaleString('ar-EG')} <small>ج.م</small></strong></div>
           <a className={`button button-gold ${!items.length ? 'disabled' : ''}`} href={items.length ? '#order' : undefined} onClick={items.length ? onClose : undefined}>إتمام الطلب <ArrowLeft size={17} /></a>
-          <p>الطلب بيتأكد معاك مباشرة على واتساب.</p>
+          <p>طلبك هيتسجل مباشرة في نظام وقار.</p>
         </div>
       </aside>
     </>

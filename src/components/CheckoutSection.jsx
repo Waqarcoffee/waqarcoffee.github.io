@@ -1,7 +1,7 @@
 import { createElement, useMemo, useState } from 'react';
 import { Banknote, Bike, Check, Clock3, Coffee, Smartphone, Upload } from 'lucide-react';
 import { PAYMENT_NUMBER } from '../data/catalog';
-import { buildOrderMessage, createOrder, openWhatsApp } from '../services/orderService';
+import { createOrder } from '../services/orderService';
 
 const paymentOptions = [
   { id: 'vodafone', name: 'Vodafone Cash', desc: 'تحويل مباشر على المحفظة', icon: Smartphone },
@@ -19,7 +19,6 @@ export default function CheckoutSection({ items, total, onSuccess }) {
   const [form, setForm] = useState({ name: '', phone: '', address: '', pickup: defaultPickup });
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
-  const [retryUrl, setRetryUrl] = useState('');
   const [proof, setProof] = useState(null);
   const [orderNumber, setOrderNumber] = useState('');
 
@@ -35,9 +34,7 @@ export default function CheckoutSection({ items, total, onSuccess }) {
     const order = { items, orderType, form, payment, total };
     try {
       const saved = await createOrder({ ...order, proof });
-      const message = `${buildOrderMessage({ ...order, total: saved.total })}\n\n*رقم الطلب:* ${saved.orderNumber}`;
       setOrderNumber(saved.orderNumber);
-      setRetryUrl(openWhatsApp(message));
       setDone(true);
       onSuccess();
     } catch (submitError) { setError(submitError.message); }
@@ -49,14 +46,14 @@ export default function CheckoutSection({ items, total, onSuccess }) {
         <div className="checkout-intro">
           <p className="eyebrow light">خطوة أخيرة</p>
           <h2 className="display-title light-title">طلبك،<br /><em>على مزاجك.</em></h2>
-          <p>كمّل بياناتك وهنفتح لك رسالة الطلب جاهزة على واتساب. راجعها وابعتها، وإحنا هنتواصل معاك للتأكيد.</p>
+          <p>كمّل بياناتك وأكد الطلب، وهيظهر عندنا مباشرة علشان نبدأ تجهيزه.</p>
           <div className="checkout-assurance"><Clock3 size={18} /><span><strong>تجهيز طازة</strong><small>كل طلب بيتجهّز وقت تأكيده.</small></span></div>
         </div>
 
         <div className="checkout-card">
           {done ? (
             <div className="order-success">
-              <span><Check size={28} /></span><p className="eyebrow">تم تسجيل الطلب · {orderNumber}</p><h3>طلبك وصل للداشبورد</h3><p>اتسجل عندنا بنجاح. راجع رسالة واتساب واضغط إرسال علشان نأكدها معاك.</p><a className="button button-dark" href={retryUrl} target="_blank" rel="noreferrer">افتح واتساب مرة تانية</a>
+              <span><Check size={28} /></span><p className="eyebrow">رقم الطلب · {orderNumber}</p><h3>تم استلام طلبك</h3><p>طلبك اتسجل عندنا بنجاح وهنبدأ مراجعته وتجهيزه.</p>
             </div>
           ) : (
             <form onSubmit={submit}>
@@ -88,7 +85,7 @@ export default function CheckoutSection({ items, total, onSuccess }) {
                 <div className="order-review-total"><span>الإجمالي</span><strong>{total.toLocaleString('ar-EG')} <small>ج.م</small></strong></div>
               </div>
               {error && <p className="form-error" role="alert">{error}</p>}
-              <button className="button button-dark checkout-submit" type="submit">تأكيد الطلب على واتساب <span>↙</span></button>
+              <button className="button button-dark checkout-submit" type="submit">تأكيد الطلب <span>↙</span></button>
             </form>
           )}
         </div>
