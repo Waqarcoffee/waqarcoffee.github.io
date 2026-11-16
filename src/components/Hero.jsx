@@ -15,7 +15,7 @@ export default function Hero({ settings = {} }) {
           <p className="hero-lead">من اختيار الحبة للتحميص والتقديم — بنقدملك فنجان له شخصية، وتوليفة معمولة علشان ترجع لها.</p>
           <div className="hero-actions">
             <a className="button button-gold" href="#menu">اكتشف المنيو <ArrowLeft size={17} /></a>
-            <a className="text-link light-link" href="#roastery">تسوّق البن <span>↙</span></a>
+            <a className="text-link light-link" href="#roastery">تسوّق البن <ArrowDownLeft size={16} /></a>
           </div>
         </div>
         <div className="hero-aside" aria-hidden="true">

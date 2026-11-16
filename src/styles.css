@@ -131,7 +131,7 @@ img { display: block; max-width: 100%; }
 .menu-rule { flex: 1; height: 1px; border-top: 1px dotted rgba(255,255,255,.12); }
 .menu-item strong { color: var(--gold-light); font-family: var(--font-serif); font-size: 19px; font-weight: 500; }
 .menu-item strong small { color: #776b63; font-family: var(--font-ar); font-size: 7px; }
-.menu-item button { width: 30px; height: 30px; display: grid; flex: 0 0 auto; place-items: center; border: 1px solid rgba(195,154,85,.35); border-radius: 50%; background: transparent; color: var(--gold-light); cursor: pointer; transition: background .2s ease, color .2s ease; }
+.menu-item button { min-width: 62px; height: 32px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto; padding: 0 10px; border: 1px solid rgba(195,154,85,.35); border-radius: 2px; background: transparent; color: var(--gold-light); cursor: pointer; font-family: var(--font-ar); font-size: 8px; transition: background .2s ease, border-color .2s ease, color .2s ease; }
 .menu-item button:hover { background: var(--gold); color: var(--ink); }
 
 /* Roastery */
@@ -280,7 +280,7 @@ img { display: block; max-width: 100%; }
 .order-review-total strong { color: var(--burgundy); font-family: var(--font-serif); font-size: 30px; white-space: nowrap; }
 .order-review-total strong small { font-family: var(--font-ar); font-size: 8px; }
 .checkout-submit { width: 100%; margin-top: 17px; }
-.checkout-submit > span { margin-right: auto; color: var(--gold-light); }
+.checkout-submit > svg { margin-right: auto; color: var(--gold-light); }
 .form-error { margin: 12px 0 0; color: #9b343f; font-size: 9px; }
 .order-success { min-height: 570px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .order-success > span { width: 68px; height: 68px; display: grid; place-items: center; margin-bottom: 26px; border-radius: 50%; background: var(--burgundy); color: var(--gold-light); }

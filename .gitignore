@@ -11,3 +11,5 @@ storage/public/*
 !storage/public/.gitkeep
 coverage/
 screenshots/test-results/
+.wrangler/
+.dev.vars

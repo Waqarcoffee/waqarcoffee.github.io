@@ -65,6 +65,25 @@ docker compose up --build
 
 الخدمة تعمل على `http://127.0.0.1:8787` مع Volumes مستقلة لقاعدة البيانات وإثباتات الدفع.
 
+## النشر على Cloudflare Free
+
+نسخة Cloudflare تستخدم Worker واحد لتشغيل واجهة React والـAPI، مع D1 للبيانات وWorkers KV للصور وإثباتات الدفع.
+
+```bash
+npx wrangler login --device
+npm run build
+npm run cf:migrate
+npx wrangler secret put ADMIN_EMAIL
+npx wrangler secret put ADMIN_PASSWORD_HASH
+npx wrangler deploy
+```
+
+- إعدادات الموارد موجودة في `wrangler.jsonc`.
+- جداول D1 موجودة في `migrations/`.
+- كود الـWorker موجود في `worker/`.
+- بيانات الأدمن تُحفظ كـCloudflare Secrets ولا تُضاف إلى Git.
+- رابط التجربة الحالي: `https://waqar-coffee-demo.puracaretesting.workers.dev`
+
 ## الهيكل
 
 - `src/admin` — واجهة الإدارة.

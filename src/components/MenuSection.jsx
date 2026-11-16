@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { menuCategories as fallbackCategories } from '../data/catalog';
 
 export default function MenuSection({ categories = fallbackCategories, onAddDrink }) {
@@ -45,7 +45,7 @@ export default function MenuSection({ categories = fallbackCategories, onAddDrin
                 <div className="menu-item-copy"><h4>{item.ar}</h4><p>{item.en}</p></div>
                 <span className="menu-rule" />
                 <strong>{item.price}<small> EGP</small></strong>
-                <button type="button" onClick={() => onAddDrink({ category: active, item, index })} aria-label={`أضف ${item.ar} للسلة`}><Plus size={17} /></button>
+                <button type="button" onClick={() => onAddDrink({ category: active, item, index })} aria-label={`أضف ${item.ar} للسلة`}><ShoppingBag size={13} /><span>أضف</span></button>
               </article>;
             })}
           </div>

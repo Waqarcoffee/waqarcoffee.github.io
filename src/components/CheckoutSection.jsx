@@ -81,11 +81,11 @@ export default function CheckoutSection({ items, total, onSuccess }) {
               {(payment === 'vodafone' || payment === 'instapay') && <label className="proof-upload"><Upload size={18} /><span><strong>{proof ? proof.name : 'ارفع صورة التحويل'}</strong><small>PNG أو JPG أو WebP — بحد أقصى 5MB</small></span><input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => setProof(event.target.files?.[0] || null)} /></label>}
 
               <div className="order-review">
-                <div className="order-review-items"><p>طلبك ({items.reduce((sum, item) => sum + item.qty, 0)})</p>{items.slice(0, 3).map((item) => <span key={item.id}>{item.arName || item.name} × {item.qty}</span>)}{items.length > 3 && <small>+ {items.length - 3} منتجات أخرى</small>}</div>
+                <div className="order-review-items"><p>طلبك ({items.reduce((sum, item) => sum + item.qty, 0)})</p>{items.slice(0, 3).map((item) => <span key={item.id}>{item.arName || item.name} × {item.qty}</span>)}{items.length > 3 && <small>{items.length - 3} منتجات إضافية</small>}</div>
                 <div className="order-review-total"><span>الإجمالي</span><strong>{total.toLocaleString('ar-EG')} <small>ج.م</small></strong></div>
               </div>
               {error && <p className="form-error" role="alert">{error}</p>}
-              <button className="button button-dark checkout-submit" type="submit">تأكيد الطلب <span>↙</span></button>
+              <button className="button button-dark checkout-submit" type="submit">تأكيد الطلب <Check size={17} /></button>
             </form>
           )}
         </div>

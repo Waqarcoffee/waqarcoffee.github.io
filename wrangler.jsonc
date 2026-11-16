@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "waqar-coffee-demo",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-16",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/uploads/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "waqar-coffee-db",
+      "database_id": "9ec378e4-13a0-42f0-90ca-a28cb7eee332",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "FILES",
+      "id": "a1fff84aad98401c83dea30c80c783e2"
+    }
+  ]
+}
