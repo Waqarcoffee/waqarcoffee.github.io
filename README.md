@@ -82,7 +82,7 @@ npx wrangler deploy
 - جداول D1 موجودة في `migrations/`.
 - كود الـWorker موجود في `worker/`.
 - بيانات الأدمن تُحفظ كـCloudflare Secrets ولا تُضاف إلى Git.
-- رابط التجربة الحالي: `https://waqar-coffee-demo.puracaretesting.workers.dev`
+- رابط التجربة الحالي: `https://waqar-coffee-demo.waqar-coffee.workers.dev`
 
 ## الهيكل
 

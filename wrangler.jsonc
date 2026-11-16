@@ -15,14 +15,14 @@
     {
       "binding": "DB",
       "database_name": "waqar-coffee-db",
-      "database_id": "9ec378e4-13a0-42f0-90ca-a28cb7eee332",
+      "database_id": "41875335-f675-40bf-9881-70d2b211d7e8",
       "migrations_dir": "migrations"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "FILES",
-      "id": "a1fff84aad98401c83dea30c80c783e2"
+      "id": "d68a49e11cdf4cefb3d8d0a956a96ad9"
     }
   ]
 }
